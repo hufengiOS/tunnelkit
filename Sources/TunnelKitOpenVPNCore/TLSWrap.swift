@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 9/11/18.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -32,7 +32,7 @@ extension OpenVPN {
 
         /// The wrapping strategy.
         public enum Strategy: String, Codable, Equatable {
-            
+
             /// Authenticates payload (--tls-auth).
             case auth
 
@@ -42,10 +42,10 @@ extension OpenVPN {
 
         /// The wrapping strategy.
         public let strategy: Strategy
-        
+
         /// The static encryption key.
         public let key: StaticKey
-        
+
         public init(strategy: Strategy, key: StaticKey) {
             self.strategy = strategy
             self.key = key
@@ -54,7 +54,7 @@ extension OpenVPN {
         public static func deserialized(_ data: Data) throws -> TLSWrap {
             return try JSONDecoder().decode(TLSWrap.self, from: data)
         }
-        
+
         public func serialized() -> Data? {
             return try? JSONEncoder().encode(self)
         }

@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 9/9/18.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -31,10 +31,10 @@ public struct BidirectionalState<T> {
 
     /// The inbound state.
     public var inbound: T
-    
+
     /// The outbound state.
     public var outbound: T
-    
+
     /**
      Returns current state as a pair.
      
@@ -43,7 +43,7 @@ public struct BidirectionalState<T> {
     public var pair: (T, T) {
         return (inbound, outbound)
     }
-    
+
     /**
      Inits state with a value that will later be reused by `reset()`.
      
@@ -54,7 +54,7 @@ public struct BidirectionalState<T> {
         outbound = value
         resetValue = value
     }
-    
+
     /**
      Resets state to the value provided with `init(withResetValue:)`.
      */

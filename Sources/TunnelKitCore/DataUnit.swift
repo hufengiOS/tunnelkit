@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 3/30/18.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -28,29 +28,29 @@ import Foundation
 /// Helps expressing integers in bytes, kB, MB, GB.
 public enum DataUnit: UInt, CustomStringConvertible {
     case byte = 1
-    
+
     case kilobyte = 1024
-    
+
     case megabyte = 1048576
-    
+
     case gigabyte = 1073741824
 
     fileprivate var showsDecimals: Bool {
         switch self {
         case .byte, .kilobyte:
             return false
-            
+
         case .megabyte, .gigabyte:
             return true
         }
     }
-    
+
     fileprivate var boundary: UInt {
         return UInt(0.1 * Double(rawValue))
     }
-    
+
     // MARK: CustomStringConvertible
-    
+
     public var description: String {
         switch self {
         case .byte:
@@ -82,7 +82,7 @@ extension UInt: DataUnitRepresentable {
         .kilobyte,
         .byte
     ]
-    
+
     public var descriptionAsDataUnit: String {
         if self == 0 {
             return "0B"

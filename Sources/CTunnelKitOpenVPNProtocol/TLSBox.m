@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 2/3/17.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -214,9 +214,7 @@ static BIO *create_BIO_from_PEM(NSString *pem) {
     self.ctx = SSL_CTX_new(TLS_client_method());
     SSL_CTX_set_options(self.ctx, SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3 | SSL_OP_NO_COMPRESSION);
     SSL_CTX_set_verify(self.ctx, SSL_VERIFY_PEER, TLSBoxVerifyPeer);
-    if (self.securityLevel != TLSBoxDefaultSecurityLevel) {
-        SSL_CTX_set_security_level(self.ctx, (int)self.securityLevel);
-    }
+    SSL_CTX_set_security_level(self.ctx, (int)self.securityLevel);
 
     if (self.caPath) {
         if (!SSL_CTX_load_verify_locations(self.ctx, [self.caPath cStringUsingEncoding:NSASCIIStringEncoding], NULL)) {
@@ -406,7 +404,7 @@ static BIO *create_BIO_from_PEM(NSString *pem) {
 
 - (BOOL)verifyEKUWithSSL:(SSL *)ssl
 {
-    X509 *cert = SSL_get_peer_certificate(self.ssl);
+    X509 *cert = SSL_get1_peer_certificate(self.ssl);
     if (!cert) {
         return NO;
     }
@@ -454,7 +452,7 @@ static BIO *create_BIO_from_PEM(NSString *pem) {
 
 - (BOOL)verifySANHostWithSSL:(SSL *)ssl
 {
-    X509 *cert = SSL_get_peer_certificate(self.ssl);
+    X509 *cert = SSL_get1_peer_certificate(self.ssl);
     if (!cert) {
         return NO;
     }

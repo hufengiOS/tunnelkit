@@ -1,9 +1,9 @@
 //
-//  RoutingTable.h
+//  XORMethodNative.h
 //  TunnelKit
 //
-//  Created by Davide De Rosa on 4/30/19.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Created by Davide De Rosa on 11/4/22.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -25,19 +25,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RoutingTableEntry.h"
-
-NS_ASSUME_NONNULL_BEGIN
-
-@interface RoutingTable : NSObject
-
-- (NSArray<RoutingTableEntry *> *)ipv4;
-- (NSArray<RoutingTableEntry *> *)ipv6;
-- (nullable RoutingTableEntry *)defaultGateway4;
-- (nullable RoutingTableEntry *)defaultGateway6;
-- (nullable RoutingTableEntry *)broadestRoute4MatchingDestination:(NSString *)destination;
-- (nullable RoutingTableEntry *)broadestRoute6MatchingDestination:(NSString *)destination;
-
-@end
-
-NS_ASSUME_NONNULL_END
+typedef NS_ENUM(NSInteger, XORMethodNative) {
+    XORMethodNativeNone,
+    XORMethodNativeMask,
+    XORMethodNativePtrPos,
+    XORMethodNativeReverse,
+    XORMethodNativeObfuscate
+};

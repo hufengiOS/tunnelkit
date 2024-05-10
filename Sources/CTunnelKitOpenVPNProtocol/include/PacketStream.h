@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 4/25/19.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -24,14 +24,24 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "XORMethodNative.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PacketStream : NSObject
 
-+ (NSArray<NSData *> *)packetsFromStream:(NSData *)stream until:(NSInteger *)until xorMask:(uint8_t)xorMask;
-+ (NSData *)streamFromPacket:(NSData *)packet xorMask:(uint8_t)xorMask;
-+ (NSData *)streamFromPackets:(NSArray<NSData *> *)packets xorMask:(uint8_t)xorMask;
++ (NSArray<NSData *> *)packetsFromInboundStream:(NSData *)stream
+                                          until:(NSInteger *)until
+                                      xorMethod:(XORMethodNative)xorMethod
+                                        xorMask:(nullable NSData *)xorMask;
+
++ (NSData *)outboundStreamFromPacket:(NSData *)packet
+                           xorMethod:(XORMethodNative)xorMethod
+                             xorMask:(nullable NSData *)xorMask;
+
++ (NSData *)outboundStreamFromPackets:(NSArray<NSData *> *)packets
+                            xorMethod:(XORMethodNative)xorMethod
+                              xorMask:(nullable NSData *)xorMask;
 
 @end
 

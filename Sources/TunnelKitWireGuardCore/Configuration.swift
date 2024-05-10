@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 11/23/21.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -29,18 +29,22 @@ import NetworkExtension
 
 public protocol WireGuardConfigurationProviding {
     var interface: InterfaceConfiguration { get }
-    
+
     var peers: [PeerConfiguration] { get }
-    
+
     var privateKey: String { get }
 
     var publicKey: String { get }
 
     var addresses: [String] { get }
-    
+
     var dnsServers: [String] { get }
 
     var dnsSearchDomains: [String] { get }
+
+    var dnsHTTPSURL: URL? { get }
+
+    var dnsTLSServerName: String? { get }
 
     var mtu: UInt16? { get }
 
@@ -60,39 +64,39 @@ public protocol WireGuardConfigurationProviding {
 extension WireGuard {
     public struct ConfigurationBuilder: WireGuardConfigurationProviding {
         private static let defaultGateway4 = IPAddressRange(from: "0.0.0.0/0")!
-        
+
         private static let defaultGateway6 = IPAddressRange(from: "::/0")!
-        
+
         public private(set) var interface: InterfaceConfiguration
 
         public private(set) var peers: [PeerConfiguration]
-        
+
         public init() {
             self.init(PrivateKey())
         }
 
         public init(_ base64PrivateKey: String) throws {
             guard let privateKey = PrivateKey(base64Key: base64PrivateKey) else {
-                throw WireGuard.ConfigurationError.invalidKey
+                throw WireGuard.ConfigurationError.interfaceHasInvalidPrivateKey(base64PrivateKey)
             }
             self.init(privateKey)
         }
-        
+
         private init(_ privateKey: PrivateKey) {
             interface = InterfaceConfiguration(privateKey: privateKey)
             peers = []
         }
-        
+
         public init(_ tunnelConfiguration: TunnelConfiguration) {
             interface = tunnelConfiguration.interface
             peers = tunnelConfiguration.peers
         }
-        
+
         // MARK: WireGuardConfigurationProviding
-        
+
         public var privateKey: String {
             get {
-                return interface.privateKey.base64Key
+                interface.privateKey.base64Key
             }
             set {
                 guard let key = PrivateKey(base64Key: newValue) else {
@@ -104,16 +108,16 @@ extension WireGuard {
 
         public var addresses: [String] {
             get {
-                return interface.addresses.map(\.stringRepresentation)
+                interface.addresses.map(\.stringRepresentation)
             }
             set {
                 interface.addresses = newValue.compactMap(IPAddressRange.init)
             }
         }
-        
+
         public var dnsServers: [String] {
             get {
-                return interface.dns.map(\.stringRepresentation)
+                interface.dns.map(\.stringRepresentation)
             }
             set {
                 interface.dns = newValue.compactMap(DNSServer.init)
@@ -122,27 +126,45 @@ extension WireGuard {
 
         public var dnsSearchDomains: [String] {
             get {
-                return interface.dnsSearch
+                interface.dnsSearch
             }
             set {
                 interface.dnsSearch = newValue
             }
         }
 
+        public var dnsHTTPSURL: URL? {
+            get {
+                interface.dnsHTTPSURL
+            }
+            set {
+                interface.dnsHTTPSURL = newValue
+            }
+        }
+
+        public var dnsTLSServerName: String? {
+            get {
+                interface.dnsTLSServerName
+            }
+            set {
+                interface.dnsTLSServerName = newValue
+            }
+        }
+
         public var mtu: UInt16? {
             get {
-                return interface.mtu
+                interface.mtu
             }
             set {
                 interface.mtu = newValue
             }
         }
-        
+
         // MARK: Modification
 
         public mutating func addPeer(_ base64PublicKey: String, endpoint: String, allowedIPs: [String] = []) throws {
             guard let publicKey = PublicKey(base64Key: base64PublicKey) else {
-                throw WireGuard.ConfigurationError.invalidKey
+                throw WireGuard.ConfigurationError.peerHasInvalidPublicKey(base64PublicKey)
             }
             var peer = PeerConfiguration(publicKey: publicKey)
             peer.endpoint = Endpoint(from: endpoint)
@@ -152,7 +174,7 @@ extension WireGuard {
 
         public mutating func setPreSharedKey(_ base64Key: String, ofPeer peerIndex: Int) throws {
             guard let preSharedKey = PreSharedKey(base64Key: base64Key) else {
-                throw WireGuard.ConfigurationError.invalidKey
+                throw WireGuard.ConfigurationError.peerHasInvalidPreSharedKey(base64Key)
             }
             peers[peerIndex].preSharedKey = preSharedKey
         }
@@ -176,7 +198,7 @@ extension WireGuard {
                 $0 == Self.defaultGateway6
             }
         }
-        
+
         public mutating func removeDefaultGateways(fromPeer peerIndex: Int) {
             peers[peerIndex].allowedIPs.removeAll {
                 $0 == Self.defaultGateway4 || $0 == Self.defaultGateway6
@@ -208,7 +230,7 @@ extension WireGuard {
         public mutating func setKeepAlive(_ keepAlive: UInt16, forPeer peerIndex: Int) {
             peers[peerIndex].persistentKeepAlive = keepAlive
         }
-        
+
         public func build() -> Configuration {
             let tunnelConfiguration = TunnelConfiguration(name: nil, interface: interface, peers: peers)
             return Configuration(tunnelConfiguration: tunnelConfiguration)
@@ -217,58 +239,66 @@ extension WireGuard {
 
     public struct Configuration: Codable, Equatable, WireGuardConfigurationProviding {
         public let tunnelConfiguration: TunnelConfiguration
-        
+
         public var interface: InterfaceConfiguration {
-            return tunnelConfiguration.interface
+            tunnelConfiguration.interface
         }
-        
+
         public var peers: [PeerConfiguration] {
-            return tunnelConfiguration.peers
+            tunnelConfiguration.peers
         }
-        
+
         public init(tunnelConfiguration: TunnelConfiguration) {
             self.tunnelConfiguration = tunnelConfiguration
         }
-        
+
         public func builder() -> WireGuard.ConfigurationBuilder {
-            return WireGuard.ConfigurationBuilder(tunnelConfiguration)
+            WireGuard.ConfigurationBuilder(tunnelConfiguration)
         }
 
         // MARK: WireGuardConfigurationProviding
-        
+
         public var privateKey: String {
-            return interface.privateKey.base64Key
+            interface.privateKey.base64Key
         }
 
         public var publicKey: String {
-            return interface.privateKey.publicKey.base64Key
+            interface.privateKey.publicKey.base64Key
         }
 
         public var addresses: [String] {
-            return interface.addresses.map(\.stringRepresentation)
+            interface.addresses.map(\.stringRepresentation)
         }
-        
+
         public var dnsServers: [String] {
-            return interface.dns.map(\.stringRepresentation)
+            interface.dns.map(\.stringRepresentation)
         }
 
         public var dnsSearchDomains: [String] {
-            return interface.dnsSearch
+            interface.dnsSearch
+        }
+
+        public var dnsHTTPSURL: URL? {
+            interface.dnsHTTPSURL
+        }
+
+        public var dnsTLSServerName: String? {
+            interface.dnsTLSServerName
         }
 
         public var mtu: UInt16? {
-            return interface.mtu
+            interface.mtu
         }
 
         // MARK: Codable
-        
+
         public init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
             let wg = try container.decode(String.self)
             let cfg = try TunnelConfiguration(fromWgQuickConfig: wg, called: nil)
             self.init(tunnelConfiguration: cfg)
         }
-        
+
         public func encode(to encoder: Encoder) throws {
             let wg = tunnelConfiguration.asWgQuickConfig()
             var container = encoder.singleValueContainer()
@@ -279,30 +309,30 @@ extension WireGuard {
 
 extension WireGuardConfigurationProviding {
     public var publicKey: String {
-        return interface.privateKey.publicKey.base64Key
+        interface.privateKey.publicKey.base64Key
     }
 
     public var peersCount: Int {
-        return peers.count
+        peers.count
     }
-    
+
     public func publicKey(ofPeer peerIndex: Int) -> String {
-        return peers[peerIndex].publicKey.base64Key
+        peers[peerIndex].publicKey.base64Key
     }
 
     public func preSharedKey(ofPeer peerIndex: Int) -> String? {
-        return peers[peerIndex].preSharedKey?.base64Key
+        peers[peerIndex].preSharedKey?.base64Key
     }
 
     public func endpoint(ofPeer peerIndex: Int) -> String? {
-        return peers[peerIndex].endpoint?.stringRepresentation
+        peers[peerIndex].endpoint?.stringRepresentation
     }
 
     public func allowedIPs(ofPeer peerIndex: Int) -> [String] {
-        return peers[peerIndex].allowedIPs.map(\.stringRepresentation)
+        peers[peerIndex].allowedIPs.map(\.stringRepresentation)
     }
 
     public func keepAlive(ofPeer peerIndex: Int) -> UInt16? {
-        return peers[peerIndex].persistentKeepAlive
+        peers[peerIndex].persistentKeepAlive
     }
 }

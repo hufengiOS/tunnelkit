@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 5/12/20.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -27,9 +27,9 @@ import Foundation
 /// Helper for handling IP headers.
 public struct IPHeader {
     private static let ipV4: UInt8 = 4
-    
+
     private static let ipV6: UInt8 = 6
-    
+
     private static let ipV4ProtocolNumber = AF_INET as NSNumber
 
     private static let ipV6ProtocolNumber = AF_INET6 as NSNumber

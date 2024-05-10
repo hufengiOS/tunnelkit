@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 3/3/22.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -31,27 +31,27 @@ private let log = SwiftyBeaver.self
 
 class ResolvedRemote: CustomStringConvertible {
     let originalEndpoint: Endpoint
-    
+
     private(set) var isResolved: Bool
-    
+
     private(set) var resolvedEndpoints: [Endpoint]
 
     private var currentEndpointIndex: Int
-    
+
     var currentEndpoint: Endpoint? {
         guard currentEndpointIndex < resolvedEndpoints.count else {
             return nil
         }
         return resolvedEndpoints[currentEndpointIndex]
     }
-    
+
     init(_ originalEndpoint: Endpoint) {
         self.originalEndpoint = originalEndpoint
         isResolved = false
         resolvedEndpoints = []
         currentEndpointIndex = 0
     }
-    
+
     func nextEndpoint() -> Bool {
         currentEndpointIndex += 1
         return currentEndpointIndex < resolvedEndpoints.count
@@ -63,8 +63,8 @@ class ResolvedRemote: CustomStringConvertible {
             completionHandler()
         }
     }
-    
-    private func handleResult(_ result: Result<[DNSRecord], DNSError>) {
+
+    private func handleResult(_ result: Result<[DNSRecord], Error>) {
         switch result {
         case .success(let records):
             log.debug("DNS resolved addresses: \(records.map { $0.address }.maskedDescription)")
@@ -87,9 +87,9 @@ class ResolvedRemote: CustomStringConvertible {
         log.debug("Unrolled endpoints: \(endpoints.maskedDescription)")
         return endpoints
     }
-    
+
     // MARK: CustomStringConvertible
-    
+
     var description: String {
         "{\(originalEndpoint.maskedDescription), resolved: \(resolvedEndpoints.maskedDescription)}"
     }

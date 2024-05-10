@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 1/22/21.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -33,10 +33,10 @@ public enum DNSProtocol: String, Codable {
 
     /// Standard plaintext DNS (port 53).
     case plain
-    
+
     /// DNS over HTTPS.
     case https
-    
+
     /// DNS over TLS (port 853).
     case tls
 }

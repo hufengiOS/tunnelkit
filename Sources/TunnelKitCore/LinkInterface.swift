@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 8/27/17.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -38,7 +38,7 @@ import Foundation
 
 /// Represents a specific I/O interface meant to work at the link layer (e.g. TCP/IP).
 public protocol LinkInterface: IOInterface {
-    
+
     /// When `true`, packets delivery is guaranteed.
     var isReliable: Bool { get }
 
@@ -50,7 +50,4 @@ public protocol LinkInterface: IOInterface {
 
     /// The number of packets that this interface is able to bufferize.
     var packetBufferSize: Int { get }
-    
-    /// A byte to xor all packet payloads with.
-    var xorMask: UInt8 { get }
 }

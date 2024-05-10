@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 3/5/22.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -30,10 +30,10 @@ public struct DataCount: Equatable {
 
     /// Received bytes count.
     public let received: UInt
-    
+
     /// Sent bytes count.
     public let sent: UInt
-    
+
     public init(_ received: UInt, _ sent: UInt) {
         self.received = received
         self.sent = sent

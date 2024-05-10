@@ -1,9 +1,9 @@
 //
-//  Errors.swift
+//  TunnelKitManagerError.swift
 //  TunnelKit
 //
-//  Created by Davide De Rosa on 5/19/19.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Created by Davide De Rosa on 6/16/23.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -24,19 +24,8 @@
 //
 
 import Foundation
-import CTunnelKitOpenVPNCore
 
-extension Error {
-    public func isOpenVPNError() -> Bool {
-        let te = self as NSError
-        return te.domain == OpenVPNErrorDomain
-    }
-    
-    public func openVPNErrorCode() -> OpenVPNErrorCode? {
-        let te = self as NSError
-        guard te.domain == OpenVPNErrorDomain else {
-            return nil
-        }
-        return OpenVPNErrorCode(rawValue: te.code)
-    }
+/// Errors returned by Core library.
+public enum TunnelKitManagerError: Error {
+    case keychain(_ error: KeychainError)
 }

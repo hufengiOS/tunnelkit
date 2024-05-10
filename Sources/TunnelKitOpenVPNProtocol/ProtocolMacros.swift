@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 2/8/17.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -39,7 +39,7 @@ import TunnelKitOpenVPNCore
 
 extension OpenVPN {
     class ProtocolMacros {
-        
+
         // UInt32(0) + UInt8(KeyMethod = 2)
         static let tlsPrefix = Data(hex: "0000000002")
 

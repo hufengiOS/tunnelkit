@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 2/4/17.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -167,18 +167,18 @@
     NSParameterAssert(data);
     
     unsigned int l = 0;
-    int code = 1;
 
-    HMAC_CTX *ctx = HMAC_CTX_new();
-    TUNNEL_CRYPTO_TRACK_STATUS(code) HMAC_CTX_reset(ctx);
-    TUNNEL_CRYPTO_TRACK_STATUS(code) HMAC_Init_ex(ctx, secret, (int)secretLength, EVP_get_digestbyname([digestName cStringUsingEncoding:NSASCIIStringEncoding]), NULL);
-    TUNNEL_CRYPTO_TRACK_STATUS(code) HMAC_Update(ctx, data, dataLength);
-    TUNNEL_CRYPTO_TRACK_STATUS(code) HMAC_Final(ctx, hmac, &l);
-    HMAC_CTX_free(ctx);
-    
+    const BOOL success = HMAC(EVP_get_digestbyname([digestName cStringUsingEncoding:NSASCIIStringEncoding]),
+                              secret,
+                              (int)secretLength,
+                              data,
+                              dataLength,
+                              hmac,
+                              &l) != NULL;
+
     *hmacLength = l;
 
-    TUNNEL_CRYPTO_RETURN_STATUS(code)
+    return success;
 }
 
 @end

@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 4/27/17.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -61,9 +61,9 @@ public func Z(_ data: Data) -> ZeroingData {
     return ZeroingData(data: data)
 }
 
-//public func Z(_ data: Data, _ offset: Int, _ count: Int) -> ZeroingData {
+// public func Z(_ data: Data, _ offset: Int, _ count: Int) -> ZeroingData {
 //    return ZeroingData(data: data, offset: offset, count: count)
-//}
+// }
 
 public func Z(_ string: String, nullTerminated: Bool) -> ZeroingData {
     return ZeroingData(string: string, nullTerminated: nullTerminated)

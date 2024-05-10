@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 3/12/22.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -24,9 +24,8 @@
 //
 
 import Foundation
+import WireGuardKit
 
 extension WireGuard {
-    public enum ConfigurationError: Error {
-        case invalidKey
-    }
+    public typealias ConfigurationError = TunnelConfiguration.ParseError
 }

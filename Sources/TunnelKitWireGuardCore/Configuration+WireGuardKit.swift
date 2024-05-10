@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 11/23/21.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -26,21 +26,13 @@
 import Foundation
 import WireGuardKit
 
-public struct ConfigurationError: Error {
-    let parseError: TunnelConfiguration.ParseError
-}
-
 extension WireGuard.Configuration {
     public init(wgQuickConfig: String) throws {
-        do {
-            tunnelConfiguration = try TunnelConfiguration(fromWgQuickConfig: wgQuickConfig)
-        } catch let parseError as TunnelConfiguration.ParseError {
-            throw ConfigurationError(parseError: parseError)
-        }
+        tunnelConfiguration = try TunnelConfiguration(fromWgQuickConfig: wgQuickConfig)
     }
 
     public func asWgQuickConfig() -> String {
-        return tunnelConfiguration.asWgQuickConfig()
+        tunnelConfiguration.asWgQuickConfig()
     }
 
     public var endpointRepresentation: String {

@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 6/12/18.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -96,6 +96,21 @@ extension Notification {
         set {
             var newInfo = userInfo ?? [:]
             newInfo["Error"] = newValue
+            userInfo = newInfo
+        }
+    }
+
+    /// The current VPN connection date.
+    public var connectionDate: Date? {
+        get {
+            guard let date = userInfo?["ConnectionDate"] as? Date else {
+                fatalError("Notification has no connectionDate")
+            }
+            return date
+        }
+        set {
+            var newInfo = userInfo ?? [:]
+            newInfo["ConnectionDate"] = newValue
             userInfo = newInfo
         }
     }

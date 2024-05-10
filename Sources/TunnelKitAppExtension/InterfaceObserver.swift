@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 6/14/17.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -38,7 +38,7 @@ import Foundation
 #if os(iOS)
 import NetworkExtension
 import SystemConfiguration.CaptiveNetwork
-#else
+#elseif os(macOS)
 import CoreWLAN
 #endif
 import SwiftyBeaver
@@ -52,9 +52,9 @@ public class InterfaceObserver: NSObject {
     public static let didDetectWifiChange = Notification.Name("InterfaceObserverDidDetectWifiChange")
 
     private var queue: DispatchQueue?
-    
+
     private var timer: DispatchSourceTimer?
-    
+
     private var lastWifiName: String?
 
     /**
@@ -89,7 +89,7 @@ public class InterfaceObserver: NSObject {
             self.fireWifiChange(withSSID: $0)
         }
     }
-    
+
     private func fireWifiChange(withSSID ssid: String?) {
         if ssid != lastWifiName {
             if let current = ssid {
@@ -113,32 +113,15 @@ public class InterfaceObserver: NSObject {
      **/
     public static func fetchCurrentSSID(completionHandler: @escaping (String?) -> Void) {
         #if os(iOS)
-        if #available(iOS 14, macCatalyst 14, *) {
-            NEHotspotNetwork.fetchCurrent {
-                completionHandler($0?.ssid)
-            }
-        } else if #available(macCatalyst 14, *) {
-            guard let interfaceNames = CNCopySupportedInterfaces() as? [CFString] else {
-                completionHandler(nil)
-                return
-            }
-            for name in interfaceNames {
-                guard let iface = CNCopyCurrentNetworkInfo(name) as? [String: Any] else {
-                    continue
-                }
-                if let ssid = iface["SSID"] as? String {
-                    completionHandler(ssid)
-                    return
-                }
-            }
-            completionHandler(nil)
-        } else {
-            completionHandler(nil)
+        NEHotspotNetwork.fetchCurrent {
+            completionHandler($0?.ssid)
         }
-        #else
+        #elseif os(macOS)
         let client = CWWiFiClient.shared()
         let ssid = client.interfaces()?.compactMap { $0.ssid() }.first
         completionHandler(ssid)
+        #else
+        completionHandler(nil)
         #endif
     }
 }

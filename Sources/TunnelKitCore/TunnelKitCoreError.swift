@@ -1,8 +1,8 @@
 //
-//  CryptoCTR.h
+//  TunnelKitCoreError.swift
 //  TunnelKit
 //
-//  Created by Davide De Rosa on 9/18/18.
+//  Created by Davide De Rosa on 6/16/23.
 //  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
@@ -23,17 +23,11 @@
 //  along with TunnelKit.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#import <Foundation/Foundation.h>
+import Foundation
 
-#import "Crypto.h"
-#import "DataPathCrypto.h"
+/// Errors returned by Core library.
+public enum TunnelKitCoreError: Error {
+    case secureRandom(_ error: SecureRandomError)
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface CryptoCTR : NSObject <Encrypter, Decrypter>
-
-- (instancetype)initWithCipherName:(nullable NSString *)cipherName digestName:(NSString *)digestName;
-
-@end
-
-NS_ASSUME_NONNULL_END
+    case dnsResolver(_ error: DNSError)
+}

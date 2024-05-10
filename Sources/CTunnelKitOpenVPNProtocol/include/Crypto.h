@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 3/3/17.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -47,6 +47,7 @@ typedef struct {
     NSInteger ivLength;
     const uint8_t *_Nullable ad;
     NSInteger adLength;
+    BOOL forTesting;
 } CryptoFlags;
 
 // WARNING: dest must be able to hold ciphertext

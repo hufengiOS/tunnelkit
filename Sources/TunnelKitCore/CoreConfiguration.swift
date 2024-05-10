@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 9/1/17.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -41,7 +41,7 @@ public class CoreConfiguration {
 
     /// Unique identifier of the library.
     public static let identifier = "com.algoritmico.TunnelKit"
-    
+
     /// Library version as seen in `Info.plist`.
     public static let version: String = {
         let bundle = Bundle(for: CoreConfiguration.self)
@@ -63,7 +63,7 @@ public class CoreConfiguration {
 
     /// String representing library version.
     public static var versionIdentifier: String?
-    
+
     /// Enables logging of sensitive data (hardcoded to false).
     public static let logsSensitiveData = false
 }

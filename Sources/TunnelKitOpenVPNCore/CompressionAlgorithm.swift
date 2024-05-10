@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 3/19/19.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -27,36 +27,36 @@ import Foundation
 import CTunnelKitOpenVPNCore
 
 extension OpenVPN {
-    
+
     /// Defines the type of compression algorithm.
     public enum CompressionAlgorithm: Int, Codable, CustomStringConvertible {
-        
+
         /// No compression.
         case disabled
-        
+
         /// LZO compression.
         case LZO
-        
+
         /// Any other compression algorithm (unsupported).
         case other
-        
+
         public var native: CompressionAlgorithmNative {
             guard let val = CompressionAlgorithmNative(rawValue: rawValue) else {
                 fatalError("Unhandled CompressionAlgorithm bridging")
             }
             return val
         }
-        
+
         // MARK: CustomStringConvertible
-        
+
         public var description: String {
             switch self {
             case .disabled:
                 return "disabled"
-                
+
             case .LZO:
                 return "lzo"
-                
+
             case .other:
                 return "other"
             }

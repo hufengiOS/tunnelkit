@@ -3,7 +3,7 @@
 //  TunnelKit
 //
 //  Created by Davide De Rosa on 5/23/19.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -32,7 +32,8 @@ public protocol LinkProducer {
     /**
      Returns a `LinkInterface`.
  
-     - Parameter xorMask: The XOR mask.
+     - Parameter userObject: Optional user data.
+     - Returns: A  generic `LinkInterface`.
      **/
-    func link(xorMask: UInt8?) -> LinkInterface
+    func link(userObject: Any?) -> LinkInterface
 }
