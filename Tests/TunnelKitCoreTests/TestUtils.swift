@@ -3,7 +3,7 @@
 //  TunnelKitCoreTests
 //
 //  Created by Davide De Rosa on 7/7/18.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -45,7 +45,7 @@ public class TestUtils {
         }
         return suite
     }
-    
+
     private init() {
     }
 }

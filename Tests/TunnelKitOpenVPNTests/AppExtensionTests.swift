@@ -3,7 +3,7 @@
 //  TunnelKitOpenVPNTests
 //
 //  Created by Davide De Rosa on 10/23/17.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -44,12 +44,12 @@ import TunnelKitManager
 import TunnelKitOpenVPNManager
 
 class AppExtensionTests: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
@@ -80,7 +80,7 @@ class AppExtensionTests: XCTestCase {
             XCTFail(error.localizedDescription)
             return
         }
-        
+
         XCTAssertEqual(proto.providerBundleIdentifier, bundleIdentifier)
         XCTAssertEqual(proto.serverAddress, serverAddress)
         XCTAssertEqual(proto.username, credentials.username)
@@ -88,7 +88,6 @@ class AppExtensionTests: XCTestCase {
         guard let pc = proto.providerConfiguration else {
             return
         }
-        print("\(pc)")
 
         let ovpn = pc["configuration"] as? [String: Any]
         XCTAssertEqual(pc["appGroup"] as? String, appGroup)
@@ -99,7 +98,7 @@ class AppExtensionTests: XCTestCase {
         XCTAssertEqual(ovpn?["mtu"] as? Int, cfg.configuration.mtu)
         XCTAssertEqual(ovpn?["renegotiatesAfter"] as? TimeInterval, cfg.configuration.renegotiatesAfter)
     }
-    
+
     func testDNSResolver() {
         let exp = expectation(description: "DNS")
         DNSResolver.resolve("www.google.com", timeout: 1000, queue: .main) {
@@ -107,16 +106,16 @@ class AppExtensionTests: XCTestCase {
                 exp.fulfill()
             }
             switch $0 {
-            case .success(let records):
-                print("\(records)")
+            case .success:
+                break
 
             case .failure:
-                print("Can't resolve")
+                break
             }
         }
         waitForExpectations(timeout: 5.0, handler: nil)
     }
-    
+
     func testDNSAddressConversion() {
         let testStrings = [
             "0.0.0.0",
@@ -148,7 +147,7 @@ class AppExtensionTests: XCTestCase {
             .init(hostname, .init(.udp4, 3333))
         ]
         let strategy = ConnectionStrategy(configuration: builder.build())
-        
+
         let expected = [
             "italy.privateinternetaccess.com:TCP6:2222",
             "italy.privateinternetaccess.com:UDP:1111",
@@ -159,7 +158,6 @@ class AppExtensionTests: XCTestCase {
             guard let remote = strategy.currentRemote else {
                 break
             }
-            print("\(i): \(remote)")
             XCTAssertEqual(remote.originalEndpoint.description, expected[i])
             i += 1
             guard strategy.tryNextEndpoint() else {
@@ -190,7 +188,6 @@ class AppExtensionTests: XCTestCase {
 //        var i = 0
 //        while strategy.hasEndpoint() {
 //            let endpoint = strategy.currentEndpoint()
-//            print("\(endpoint)")
 //            XCTAssertEqual(endpoint.description, expected[i])
 //            i += 1
 //            strategy.tryNextEndpoint()
@@ -219,7 +216,6 @@ class AppExtensionTests: XCTestCase {
 //        var i = 0
 //        while strategy.hasEndpoint() {
 //            let endpoint = strategy.currentEndpoint()
-//            print("\(endpoint)")
 //            XCTAssertEqual(endpoint.description, expected[i])
 //            i += 1
 //            strategy.tryNextEndpoint()

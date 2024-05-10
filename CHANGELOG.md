@@ -7,22 +7,73 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+- OpenVPN: Opt out of platform info in peer info. [#409](https://github.com/passepartoutvpn/tunnelkit/pull/409)
+
+## 6.3.2 (2024-01-05)
+
+### Fixed
+
+- OpenVPN: HMAC breaking due to dangling OSSL_PARAM. [#405](https://github.com/passepartoutvpn/tunnelkit/pull/405)
+- OpenVPN: Bad error mapping. [#404](https://github.com/passepartoutvpn/tunnelkit/pull/404)
+- OpenVPN: Restore default security level. [#406](https://github.com/passepartoutvpn/tunnelkit/pull/406)
+
+## 6.3.1 (2024-01-05)
+
+### Changed
+
+- Demo rewritten in SwiftUI. [#399](https://github.com/passepartoutvpn/tunnelkit/issues/399)
+
+## 6.3.0 (2023-12-31)
+
 ### Added
 
+- Support for Apple TV. [#337](https://github.com/passepartoutvpn/tunnelkit/issues/337)
+- Attach user data to VPN configuration. [#400](https://github.com/passepartoutvpn/tunnelkit/pull/400)
+
+## 6.2.0 (2023-12-14)
+
+### Changed
+
+- Upgrade OpenSSL to 3.2.0. [#336](https://github.com/passepartoutvpn/tunnelkit/issues/336)
+
+## 6.1.1 (2023-07-06)
+
+### Fixed
+
+- Keychain may fail to set password. [#327](https://github.com/passepartoutvpn/tunnelkit/issues/327)
+
+## 6.1.0 (2023-07-05)
+
+### Changed
+
+- Hide errors behind façade TunnelKit\*Error. [#325](https://github.com/passepartoutvpn/tunnelkit/pull/325)
+
+## 6.0.0 (2023-04-02)
+
+### Added
+
+- WireGuard: DoH/DoT options. [#314](https://github.com/passepartoutvpn/tunnelkit/pull/314)
+- OpenVPN: Full implementation of Tunnelblick XOR patch (tmthecoder). [#255](https://github.com/passepartoutvpn/tunnelkit/pull/255)
 - OpenVPN: Support for `--route-nopull`. [#280](https://github.com/passepartoutvpn/tunnelkit/pull/280)
 - OpenVPN: Support for `--remote-random-hostname`. [#286](https://github.com/passepartoutvpn/tunnelkit/pull/286)
 - Use .includeAllNetworks for best-effort kill switch. [#300](https://github.com/passepartoutvpn/tunnelkit/pull/300)
 
 ### Changed
 
+- Bump targets to iOS 15 / macOS 12.
 - Upgrade OpenSSL to 1.1.1q.
 - Use natively async methods from NetworkExtension. [#284](https://github.com/passepartoutvpn/tunnelkit/pull/284)
 - OpenVPN: Unmask PUSH_REPLY and network settings in logs.
+- OpenVPN: Delay tunnel disposal. [#311](https://github.com/passepartoutvpn/tunnelkit/pull/311)
 
 ### Fixed
 
 - OpenVPN: Deal with remote options properly. [#297](https://github.com/passepartoutvpn/tunnelkit/pull/297)
 - OpenVPN: Routes from configuration file are ignored. [#278](https://github.com/passepartoutvpn/tunnelkit/issues/278)
+- OpenVPN: Split DNS domain and search domains. [#313](https://github.com/passepartoutvpn/tunnelkit/pulls/313)
+- WireGuard: Return native parsing errors from WireGuardKit. [#316](https://github.com/passepartoutvpn/tunnelkit/pull/316)
 - IPv6 endpoints are parsed improperly. [#293](https://github.com/passepartoutvpn/tunnelkit/issues/293)
 - Fix abandoned MockVPN. [#285](https://github.com/passepartoutvpn/tunnelkit/pull/285)
 

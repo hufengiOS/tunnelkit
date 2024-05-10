@@ -3,7 +3,7 @@
 //  TunnelKitOpenVPNTests
 //
 //  Created by Davide De Rosa on 9/9/18.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -28,17 +28,17 @@ import XCTest
 import CTunnelKitOpenVPNProtocol
 
 class PacketTests: XCTestCase {
-    
+
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+
     func testControlPacket() {
         let id: UInt32 = 0x1456
         let code: PacketCode = .controlV1
@@ -48,8 +48,6 @@ class PacketTests: XCTestCase {
 
         let serialized = ControlPacket(code: code, key: key, sessionId: sessionId, packetId: id, payload: payload).serialized()
         let expected = Data(hex: "2311223344556677880000001456932748238742397591704891")
-        print("Serialized: \(serialized.toHex())")
-        print("Expected  : \(expected.toHex())")
 
         XCTAssertEqual(serialized, expected)
     }
@@ -62,9 +60,7 @@ class PacketTests: XCTestCase {
 
         let serialized = ControlPacket(key: key, sessionId: sessionId, ackIds: acks as [NSNumber], ackRemoteSessionId: remoteSessionId).serialized()
         let expected = Data(hex: "2b112233445566778805000000aa000000bb000000cc000000dd000000eea639328cbf03490e")
-        print("Serialized: \(serialized.toHex())")
-        print("Expected  : \(expected.toHex())")
-        
+
         XCTAssertEqual(serialized, expected)
     }
 }

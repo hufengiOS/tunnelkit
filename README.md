@@ -1,5 +1,6 @@
-![iOS 13+](https://img.shields.io/badge/ios-13+-green.svg)
-![macOS 10.15+](https://img.shields.io/badge/macos-10.15+-green.svg)
+![iOS 15+](https://img.shields.io/badge/ios-15+-green.svg)
+![macOS 12+](https://img.shields.io/badge/macos-12+-green.svg)
+![tvOS 17+](https://img.shields.io/badge/tvos-17+-green.svg)
 [![License GPLv3](https://img.shields.io/badge/license-GPLv3-lightgray.svg)](LICENSE)
 
 [![Unit Tests](https://github.com/passepartoutvpn/tunnelkit/actions/workflows/test.yml/badge.svg)](https://github.com/passepartoutvpn/tunnelkit/actions/workflows/test.yml)
@@ -11,7 +12,7 @@ This library provides a generic framework for VPN development on Apple platforms
 
 ## OpenVPN
 
-TunnelKit comes with a simplified Swift/Obj-C implementation of the [OpenVPN®][dep-openvpn] protocol, whose crypto layer is built on top of [OpenSSL 1.1.1][dep-openssl].
+TunnelKit comes with a simplified Swift/Obj-C implementation of the [OpenVPN®][dep-openvpn] protocol, whose crypto layer is built on top of [OpenSSL 3.2.0][dep-openssl].
 
 The client is known to work with OpenVPN® 2.3+ servers.
 
@@ -46,10 +47,20 @@ TunnelKit can parse .ovpn configuration files. Below are a few details worth men
 
 #### Non-standard
 
-- Single-byte XOR masking
-    - Via `--scramble xormask <character>`
-    - XOR all incoming and outgoing bytes by the ASCII value of the character argument
-    - See [Tunnelblick website][about-tunnelblick-xor] for more details
+- XOR-patch functionality:
+    - Multi-byte XOR Masking
+        - Via `--scramble xormask <passphrase>`
+        - XOR all incoming and outgoing bytes by the passphrase given
+    - XOR Position Masking
+        - Via `--scramble xorptrpos`
+        - XOR all bytes by their position in the array
+    - Packet Reverse Scramble
+        - Via `--scramble reverse`
+        - Keeps the first byte and reverses the rest of the array
+    - XOR Scramble Obfuscate
+        - Via `--scramble obfuscate <passphrase>`
+        - Performs a combination of the three above (specifically `xormask <passphrase>` -> `xorptrpos` -> `reverse` -> `xorptrpos` for reading, and the opposite for writing) 
+    - See [Tunnelblick website][about-tunnelblick-xor] for more details (Patch was written in accordance with Tunnelblick's patch for compatibility)
 
 #### Unsupported
 
@@ -100,7 +111,7 @@ Therefore, make sure to follow the steps below for proper integration:
 
 ### Requirements
 
-- iOS 13.0+ / macOS 10.15+
+- iOS 15+ / macOS 12+ / tvOS 17+
 - SwiftPM 5.3
 - Git (preinstalled with Xcode Command Line Tools)
 - golang (for WireGuardKit)
@@ -131,7 +142,7 @@ Download the library codebase locally:
 
     $ git clone https://github.com/passepartoutvpn/tunnelkit.git
 
-There are demo targets containing a simple app for testing the tunnels. Open `Demo/TunnelKit.xcodeproject` in Xcode and run it on both iOS and macOS.
+There are demo targets containing a simple app for testing the tunnels. Open `Demo/TunnelKit.xcodeproject` in Xcode and run it.
 
 For the VPN to work properly, the demo requires:
 
@@ -188,7 +199,7 @@ Contains the `NEPacketTunnelProvider` implementation of a WireGuard tunnel.
 
 ## License
 
-Copyright (c) 2022 Davide De Rosa. All rights reserved.
+Copyright (c) 2024 Davide De Rosa. All rights reserved.
 
 ### Part I
 
@@ -221,6 +232,7 @@ A custom TunnelKit license, e.g. for use in proprietary software, may be negotia
 - [SURFnet][ppl-surfnet]
 - [SwiftyBeaver][dep-swiftybeaver-repo] - Copyright (c) 2015 Sebastian Kreutzberger
 - [XMB5][ppl-xmb5] for the [XOR patch][ppl-xmb5-xor] - Copyright (c) 2020 Sam Foxman
+- [tmthecoder][ppl-tmthecoder] for the complete [XOR patch][ppl-tmthecoder-xor] - Copyright (c) 2022 Tejas Mehta
 - [eduVPN][ppl-eduvpn] for the convenient WireGuardKitGo script
 
 ### OpenVPN
@@ -264,6 +276,8 @@ Website: [passepartoutvpn.app][about-website]
 [ppl-surfnet]: https://www.surf.nl/en/about-surf/subsidiaries/surfnet
 [ppl-xmb5]: https://github.com/XMB5
 [ppl-xmb5-xor]: https://github.com/passepartoutvpn/tunnelkit/pull/170
+[ppl-tmthecoder]: https://github.com/tmthecoder
+[ppl-tmthecoder-xor]: https://github.com/passepartoutvpn/tunnelkit/pull/255
 [ppl-eduvpn]: https://github.com/eduvpn/apple
 [about-tunnelblick-xor]: https://tunnelblick.net/cOpenvpn_xorpatch.html
 [about-pr-bitcode]: https://github.com/passepartoutvpn/tunnelkit/issues/51

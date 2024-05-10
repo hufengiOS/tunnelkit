@@ -3,7 +3,7 @@
 //  TunnelKitLZOTests
 //
 //  Created by Davide De Rosa on 3/18/19.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -32,7 +32,6 @@ class CompressionTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-//        print("LZO version: \(LZO.versionString())")
     }
 
     override func tearDown() {
@@ -40,7 +39,7 @@ class CompressionTests: XCTestCase {
     }
 
     func testSymmetric() {
-        XCTAssertTrue(LZOFactory.isSupported());
+        XCTAssertTrue(LZOFactory.isSupported())
         let lzo = LZOFactory.create()
         let src = Data([UInt8](repeating: 6, count: 100))
         guard let dst = try? lzo.compressedData(with: src) else {
@@ -51,8 +50,6 @@ class CompressionTests: XCTestCase {
             XCTFail("Unable to decompress data")
             return
         }
-        print("BEFORE: \(src)")
-        print("AFTER : \(dstDecompressed)")
         XCTAssertEqual(src, dstDecompressed)
     }
 }

@@ -3,7 +3,7 @@
 //  TunnelKitCoreTests
 //
 //  Created by Davide De Rosa on 7/7/18.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -48,15 +48,8 @@ class RandomTests: XCTestCase {
     }
 
     func testRandom1() {
-        print(try! SecureRandom.uint32())
-        print(try! SecureRandom.uint32())
-        print(try! SecureRandom.uint32())
-        print(try! SecureRandom.uint32())
-        print(try! SecureRandom.uint32())
     }
 
     func testRandom2() {
-        print("random UInt32: \(try! SecureRandom.uint32())")
-        print("random bytes: \(try! SecureRandom.data(length: 12).toHex())")
     }
 }

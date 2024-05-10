@@ -3,7 +3,7 @@
 //  TunnelKitOpenVPNTests
 //
 //  Created by Davide De Rosa on 7/11/18.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -45,28 +45,28 @@ class DataPathEncryptionTests: XCTestCase {
     private let hmacKey = try! SecureRandom.safeData(length: 32)
 
     private var enc: DataPathEncrypter!
-    
+
     private var dec: DataPathDecrypter!
-    
+
     override func setUp() {
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-    
+
     func testCBC() {
         prepareBox(cipher: "aes-128-cbc", digest: "sha256")
         privateTestDataPathHigh(peerId: nil)
         privateTestDataPathLow(peerId: nil)
     }
-    
+
     func testFloatingCBC() {
         prepareBox(cipher: "aes-128-cbc", digest: "sha256")
         privateTestDataPathHigh(peerId: 0x64385837)
         privateTestDataPathLow(peerId: 0x64385837)
     }
-    
+
     func testGCM() {
         prepareBox(cipher: "aes-256-gcm", digest: nil)
         privateTestDataPathHigh(peerId: nil)
@@ -78,14 +78,14 @@ class DataPathEncryptionTests: XCTestCase {
         privateTestDataPathHigh(peerId: 0x64385837)
         privateTestDataPathLow(peerId: 0x64385837)
     }
-    
+
     func prepareBox(cipher: String, digest: String?) {
         let box = CryptoBox(cipherAlgorithm: cipher, digestAlgorithm: digest)
         try! box.configure(withCipherEncKey: cipherKey, cipherDecKey: cipherKey, hmacEncKey: hmacKey, hmacDecKey: hmacKey)
         enc = box.encrypter().dataPathEncrypter()
         dec = box.decrypter().dataPathDecrypter()
     }
-    
+
     func privateTestDataPathHigh(peerId: UInt32?) {
         let path = DataPath(
             encrypter: enc,
@@ -108,9 +108,7 @@ class DataPathEncryptionTests: XCTestCase {
         let key: UInt8 = 4
 
         let encrypted = try! path.encryptPackets([expectedPayload], key: key)
-        print(encrypted.map { $0.toHex() })
         let decrypted = try! path.decryptPackets(encrypted, keepAlive: nil)
-        print(decrypted.map { $0.toHex() })
         let payload = decrypted.first!
 
         XCTAssertEqual(payload, expectedPayload)

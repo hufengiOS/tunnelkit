@@ -3,7 +3,7 @@
 //  TunnelKitOpenVPNTests
 //
 //  Created by Davide De Rosa on 7/7/18.
-//  Copyright (c) 2022 Davide De Rosa. All rights reserved.
+//  Copyright (c) 2024 Davide De Rosa. All rights reserved.
 //
 //  https://github.com/passepartoutvpn
 //
@@ -41,21 +41,22 @@ import XCTest
 @testable import TunnelKitOpenVPNAppExtension
 import CTunnelKitOpenVPNProtocol
 
+// avg on MBA M1 w/ OpenSSL 3.2.0
 class DataPathPerformanceTests: XCTestCase {
     private var dataPath: DataPath!
 
     private var encrypter: DataPathEncrypter!
 
     private var decrypter: DataPathDecrypter!
-    
+
     override func setUp() {
         let ck = try! SecureRandom.safeData(length: 32)
         let hk = try! SecureRandom.safeData(length: 32)
-        
+
         let crypto = try! OpenVPN.EncryptionBridge(.aes128cbc, .sha1, ck, ck, hk, hk)
         encrypter = crypto.encrypter()
         decrypter = crypto.decrypter()
-        
+
         dataPath = DataPath(
             encrypter: encrypter,
             decrypter: decrypter,
@@ -82,22 +83,20 @@ class DataPathPerformanceTests: XCTestCase {
 //            decryptedPackets = try! self.swiftDP.decryptPackets(encryptedPackets, keepAlive: nil)
 //        }
 //        
-////        print(">>> \(packets?.count) packets")
 //        XCTAssertEqual(decryptedPackets, packets)
 //    }
-    
-    // 16ms
+
+    // 0.007
     func testPointerBased() {
         let packets = TestUtils.generateDataSuite(1200, 1000)
         var encryptedPackets: [Data]!
         var decryptedPackets: [Data]!
-        
+
         measure {
             encryptedPackets = try! self.dataPath.encryptPackets(packets, key: 0)
             decryptedPackets = try! self.dataPath.decryptPackets(encryptedPackets, keepAlive: nil)
         }
-        
-//        print(">>> \(packets?.count) packets")
+
         XCTAssertEqual(decryptedPackets, packets)
     }
 }
