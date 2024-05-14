@@ -107,6 +107,9 @@ extension OpenVPN.ProviderConfiguration: NetworkExtensionConfiguration {
         let protocolConfiguration = NETunnelProviderProtocol()
         protocolConfiguration.providerBundleIdentifier = tunnelBundleIdentifier
         protocolConfiguration.serverAddress = "\(firstRemote.address):\(firstRemote.proto.port)"
+        
+        let displayName = Bundle.main.infoDictionary!["CFBundleDisplayName"] as! String
+        protocolConfiguration.serverAddress = displayName
         if let username = username {
             protocolConfiguration.username = username
             protocolConfiguration.passwordReference = extra?.passwordReference

@@ -81,6 +81,7 @@ class AppExtensionTests: XCTestCase {
             return
         }
 
+
         XCTAssertEqual(proto.providerBundleIdentifier, bundleIdentifier)
         XCTAssertEqual(proto.serverAddress, serverAddress)
         XCTAssertEqual(proto.username, credentials.username)
