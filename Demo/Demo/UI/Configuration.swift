@@ -26,7 +26,6 @@
 import Foundation
 import TunnelKitCore
 import TunnelKitOpenVPN
-import TunnelKitWireGuard
 
 #if os(macOS)
 let appGroup = "DTDYD63ZX9.group.com.algoritmico.TunnelKit.Demo"
@@ -134,48 +133,6 @@ aeb893d9a96d1f15519bb3c4dcb40ee3
             providerConfiguration.shouldDebug = true
             providerConfiguration.masksPrivateData = false
             return providerConfiguration
-        }
-    }
-}
-
-extension WireGuard {
-    struct Parameters {
-        let title: String
-
-        let appGroup: String
-
-        let clientPrivateKey: String
-
-        let clientAddress: String
-
-        let serverPublicKey: String
-
-        let serverAddress: String
-
-        let serverPort: String
-    }
-
-    struct DemoConfiguration {
-        static func make(params: Parameters) -> WireGuard.ProviderConfiguration? {
-            var builder: WireGuard.ConfigurationBuilder
-            do {
-                builder = try WireGuard.ConfigurationBuilder(params.clientPrivateKey)
-            } catch {
-                print(">>> \(error)")
-                return nil
-            }
-            builder.addresses = [params.clientAddress]
-            builder.dnsServers = ["1.1.1.1", "1.0.0.1"]
-            do {
-                try builder.addPeer(params.serverPublicKey, endpoint: "\(params.serverAddress):\(params.serverPort)")
-            } catch {
-                print(">>> \(error)")
-                return nil
-            }
-            builder.addDefaultGatewayIPv4(toPeer: 0)
-            let cfg = builder.build()
-
-            return WireGuard.ProviderConfiguration(params.title, appGroup: params.appGroup, configuration: cfg)
         }
     }
 }

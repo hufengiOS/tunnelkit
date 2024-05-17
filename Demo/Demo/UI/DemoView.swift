@@ -42,11 +42,6 @@ struct DemoView: View {
                 .tabItem {
                     Text("OpenVPN")
                 }
-
-            WireGuardView(vpn: vpn, vpnStatus: vpnStatus)
-                .tabItem {
-                    Text("WireGuard")
-                }
         }
         .task {
             notifier.didChange = didChangeStatus
