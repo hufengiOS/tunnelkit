@@ -43,11 +43,11 @@ struct DemoView: View {
                     Text("OpenVPN")
                 }
         }
-        .task {
-            notifier.didChange = didChangeStatus
-            notifier.registerNotifications()
-            await vpn.prepare()
-        }
+//        .task {
+//            notifier.didChange = didChangeStatus
+//            notifier.registerNotifications()
+//            await vpn.prepare()
+//        }
     }
 }
 
